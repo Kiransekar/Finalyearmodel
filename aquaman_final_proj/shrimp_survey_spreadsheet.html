@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shrimp Farm Survey Response Spreadsheet</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+        
+        .add-btn {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .add-btn:hover {
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+        
+        .export-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .export-btn:hover {
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 1200px;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #ecf0f1;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.2s ease;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad) !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            font-size: 15px;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #2980b9;
+            min-width: 30px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 15px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦐 Shrimp Farm Survey Response Tracker</h1>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <span class="stat-number" id="totalResponses">0</span>
+                <span class="stat-label">Total Responses</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="completedResponses">0</span>
+                <span class="stat-label">Completed</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="avgExperience">0</span>
+                <span class="stat-label">Avg Experience (Years)</span>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="add-btn" onclick="addResponse()">+ Add New Response</button>
+            <button onclick="clearAll()">Clear All Data</button>
+            <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+        </div>
+        
+        <div class="table-container">
+            <table id="surveyTable">
+                <thead>
+                    <tr>
+                        <th>Actions</th>
+                        <th>Response #</th>
+                        <!-- Farm Profile & Demographics -->
+                        <th>1. Farmer Name</th>
+                        <th>2. Age</th>
+                        <th>3. Gender</th>
+                        <th>4. State/District</th>
+                        <th>5. Farm Size (ha)</th>
+                        <th>6. Experience (years)</th>
+                        <th>7. Farming Type</th>
+                        <!-- Production Practices -->
+                        <th>8. Shrimp Species</th>
+                        <th>9. Other Species</th>
+                        <th>10. Stocking Density</th>
+                        <th>11. Uses Aeration</th>
+                        <th>12. Aerator Type</th>
+                        <th>13. Feed Type</th>
+                        <th>14. Feeding Times/Day</th>
+                        <!-- Water Quality Management -->
+                        <th>15. Testing Frequency</th>
+                        <th>16. Hardest Parameters</th>
+                        <th>17. Measurement Equipment</th>
+                        <!-- Health & Disease -->
+                        <th>18. Disease Outbreaks</th>
+                        <th>19. Disease Types</th>
+                        <th>20. Disease Detection</th>
+                        <th>21. Preventive Measures</th>
+                        <!-- Technology & Data Use -->
+                        <th>22. Uses IoT/Sensors</th>
+                        <th>23. Monitored Parameters</th>
+                        <th>24. System Provider</th>
+                        <th>25. Data Management</th>
+                        <th>26. Apps/Software Used</th>
+                        <th>27. Desired App Alerts</th>
+                        <!-- Environmental Challenges -->
+                        <th>28. Production Challenges</th>
+                        <th>29. Weather Planning</th>
+                        <!-- Economic & Market -->
+                        <th>30. Yield (kg/ha)</th>
+                        <th>31. Price (₹/kg)</th>
+                        <th>32. Primary Buyers</th>
+                        <th>33. Marketing Challenges</th>
+                        <!-- Support & Training -->
+                        <th>34. Training Attended</th>
+                        <th>35. Training Organizer</th>
+                        <th>36. Training Topics Needed</th>
+                        <th>37. Preferred Training Mode</th>
+                        <!-- Adoption Willingness -->
+                        <th>38. IoT Adoption Likelihood</th>
+                        <th>39. Adoption Encouragers</th>
+                        <th>40. Acceptable Price Range</th>
+                        <th>41. Additional Comments</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let responseCount = 0;
+        let responses = [];
+
+        function addResponse() {
+            responseCount++;
+            const tbody = document.getElementById('tableBody');
+            const row = tbody.insertRow();
+            
+            // Create response object
+            const response = {
+                id: responseCount,
+                data: {}
+            };
+            responses.push(response);
+            
+            row.innerHTML = `
+                <td><button class="delete-btn" onclick="deleteResponse(${responseCount}, this)">Delete</button></td>
+                <td class="question-number">${responseCount}</td>
+                <!-- Demographics -->
+                <td><input type="text" onchange="updateData(${responseCount}, 'farmerName', this.value)" placeholder="Enter name"></td>
+                <td><input type="number" onchange="updateData(${responseCount}, 'age', this.value)" placeholder="Age" min="18" max="80"></td>
+                <td>
+                    <select onchange="updateData(${responseCount}, 'gender', this.value)">
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'stateDistrict', this.value)" placeholder="State/District"></td>
+                <td><input type="number" onchange="updateData(${responseCount}, 'farmSize', this.value)" placeholder="Hectares" step="0.1"></td>
+                <td><input type="number" onchange="updateData(${responseCount}, 'experience', this.value)" placeholder="Years" min="0"></td>
+                <td>
+                    <select onchange="updateData(${responseCount}, 'farmingType', this.value)">
+                        <option value="">Select</option>
+                        <option value="Extensive">Extensive</option>
+                        <option value="Semi-intensive">Semi-intensive</option>
+                        <option value="Intensive">Intensive</option>
+                    </select>
+                </td>
+                <!-- Production -->
+                <td>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" onchange="updateCheckbox(${responseCount}, 'shrimpSpecies', 'Litopenaeus vannamei', this.checked)">
+                            <label>Whiteleg</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" onchange="updateCheckbox(${responseCount}, 'shrimpSpecies', 'Penaeus monodon', this.checked)">
+                            <label>Black tiger</label>
+                        </div>
+                    </div>
+                </td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'otherSpecies', this.value)" placeholder="Other species"></td>
+                <td><input type="number" onchange="updateData(${responseCount}, 'stockingDensity', this.value)" placeholder="per m²"></td>
+                <td>
+                    <select onchange="updateData(${responseCount}, 'usesAeration', this.value)">
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'aeratorType', this.value)" placeholder="Aerator type"></td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'feedType', this.value)" placeholder="Brand/Local/DIY"></td>
+                <td><input type="number" onchange="updateData(${responseCount}, 'feedingTimes', this.value)" placeholder="Times per day" min="1"></td>
+                <!-- Water Quality -->
+                <td>
+                    <select onchange="updateData(${responseCount}, 'testingFreq', this.value)">
+                        <option value="">Select</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Rarely">Rarely</option>
+                        <option value="Never">Never</option>
+                    </select>
+                </td>
+                <td><textarea onchange="updateData(${responseCount}, 'hardestParams', this.value)" placeholder="Rank top 3 hardest parameters"></textarea></td>
+                <td>
+                    <select onchange="updateData(${responseCount}, 'measurementEquip', this.value)">
+                        <option value="">Select</option>
+                        <option value="Handheld probes">Handheld probes</option>
+                        <option value="Lab testing">Lab testing</option>
+                        <option value="Mobile app sensors">Mobile app sensors</option>
+                        <option value="None">None</option>
+                    </select>
+                </td>
+                <!-- Health & Disease -->
+                <td>
+                    <select onchange="updateData(${responseCount}, 'diseaseOutbreaks', this.value)">
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'diseaseTypes', this.value)" placeholder="Disease types"></td>
+                <td><textarea onchange="updateData(${responseCount}, 'diseaseDetection', this.value)" placeholder="Detection methods"></textarea></td>
+                <td><textarea onchange="updateData(${responseCount}, 'preventiveMeasures', this.value)" placeholder="Preventive measures"></textarea></td>
+                <!-- Technology -->
+                <td>
+                    <select onchange="updateData(${responseCount}, 'usesIoT', this.value)">
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'monitoredParams', this.value)" placeholder="Monitored parameters"></td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'systemProvider', this.value)" placeholder="System provider"></td>
+                <td>
+                    <select onchange="updateData(${responseCount}, 'dataManagement', this.value)">
+                        <option value="">Select</option>
+                        <option value="Paper logbook">Paper logbook</option>
+                        <option value="Spreadsheet">Spreadsheet</option>
+                        <option value="Mobile app">Mobile app</option>
+                        <option value="Don't record">Don't record</option>
+                    </select>
+                </td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'appsUsed', this.value)" placeholder="Apps/software"></td>
+                <td><textarea onchange="updateData(${responseCount}, 'desiredAlerts', this.value)" placeholder="Desired app alerts"></textarea></td>
+                <!-- Environmental -->
+                <td><textarea onchange="updateData(${responseCount}, 'prodChallenges', this.value)" placeholder="Top 3 production challenges"></textarea></td>
+                <td>
+                    <select onchange="updateData(${responseCount}, 'weatherPlanning', this.value)">
+                        <option value="">Select</option>
+                        <option value="Local forecasts">Local forecasts</option>
+                        <option value="Mobile weather apps">Mobile weather apps</option>
+                        <option value="Traditional knowledge">Traditional knowledge</option>
+                        <option value="Don't plan">Don't plan</option>
+                    </select>
+                </td>
+                <!-- Economic -->
+                <td><input type="number" onchange="updateData(${responseCount}, 'yield', this.value)" placeholder="kg/ha" step="0.1"></td>
+                <td><input type="number" onchange="updateData(${responseCount}, 'price', this.value)" placeholder="₹/kg" step="0.1"></td>
+                <td>
+                    <select onchange="updateData(${responseCount}, 'primaryBuyers', this.value)">
+                        <option value="">Select</option>
+                        <option value="Local traders">Local traders</option>
+                        <option value="Export companies">Export companies</option>
+                        <option value="Processing plants">Processing plants</option>
+                        <option value="Direct to consumer">Direct to consumer</option>
+                    </select>
+                </td>
+                <td><textarea onchange="updateData(${responseCount}, 'marketingChallenges', this.value)" placeholder="Marketing challenges"></textarea></td>
+                <!-- Training -->
+                <td>
+                    <select onchange="updateData(${responseCount}, 'trainingAttended', this.value)">
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'trainingOrganizer', this.value)" placeholder="Training organizer"></td>
+                <td><textarea onchange="updateData(${responseCount}, 'trainingNeeded', this.value)" placeholder="Training topics needed"></textarea></td>
+                <td>
+                    <select onchange="updateData(${responseCount}, 'trainingMode', this.value)">
+                        <option value="">Select</option>
+                        <option value="On-farm demos">On-farm demonstrations</option>
+                        <option value="Classroom">Classroom/workshop</option>
+                        <option value="Mobile tutorials">Mobile-app tutorials</option>
+                        <option value="Video modules">Video modules</option>
+                    </select>
+                </td>
+                <!-- Adoption -->
+                <td>
+                    <select onchange="updateData(${responseCount}, 'adoptionLikelihood', this.value)">
+                        <option value="">Select</option>
+                        <option value="Very likely">Very likely</option>
+                        <option value="Somewhat likely">Somewhat likely</option>
+                        <option value="Neutral">Neutral</option>
+                        <option value="Unlikely">Unlikely</option>
+                        <option value="Very unlikely">Very unlikely</option>
+                    </select>
+                </td>
+                <td><textarea onchange="updateData(${responseCount}, 'adoptionEncouragers', this.value)" placeholder="What would encourage adoption"></textarea></td>
+                <td><input type="text" onchange="updateData(${responseCount}, 'priceRange', this.value)" placeholder="₹ price range"></td>
+                <td><textarea onchange="updateData(${responseCount}, 'comments', this.value)" placeholder="Additional comments"></textarea></td>
+            `;
+            
+            updateStats();
+        }
+
+        function updateData(id, field, value) {
+            const response = responses.find(r => r.id === id);
+            if (response) {
+                response.data[field] = value;
+                updateStats();
+            }
+        }
+
+        function updateCheckbox(id, field, value, checked) {
+            const response = responses.find(r => r.id === id);
+            if (response) {
+                if (!response.data[field]) {
+                    response.data[field] = [];
+                }
+                if (checked) {
+                    if (!response.data[field].includes(value)) {
+                        response.data[field].push(value);
+                    }
+                } else {
+                    response.data[field] = response.data[field].filter(v => v !== value);
+                }
+            }
+        }
+
+        function deleteResponse(id, button) {
+            if (confirm('Are you sure you want to delete this response?')) {
+                const row = button.closest('tr');
+                row.remove();
+                responses = responses.filter(r => r.id !== id);
+                updateStats();
+            }
+        }
+
+        function clearAll() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                document.getElementById('tableBody').innerHTML = '';
+                responses = [];
+                responseCount = 0;
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            const total = responses.length;
+            const completed = responses.filter(r => 
+                r.data.farmerName && r.data.age && r.data.farmSize
+            ).length;
+            
+            const avgExp = responses.length > 0 ? 
+                responses.reduce((sum, r) => sum + (parseFloat(r.data.experience) || 0), 0) / responses.length : 0;
+
+            document.getElementById('totalResponses').textContent = total;
+            document.getElementById('completedResponses').textContent = completed;
+            document.getElementById('avgExperience').textContent = avgExp.toFixed(1);
+        }
+
+        function exportToCSV() {
+            if (responses.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            const headers = [
+                'Response ID', 'Farmer Name', 'Age', 'Gender', 'State/District', 'Farm Size (ha)', 
+                'Experience (years)', 'Farming Type', 'Shrimp Species', 'Other Species', 
+                'Stocking Density', 'Uses Aeration', 'Aerator Type', 'Feed Type', 'Feeding Times/Day',
+                'Testing Frequency', 'Hardest Parameters', 'Measurement Equipment', 'Disease Outbreaks',
+                'Disease Types', 'Disease Detection', 'Preventive Measures', 'Uses IoT/Sensors',
+                'Monitored Parameters', 'System Provider', 'Data Management', 'Apps Used',
+                'Desired Alerts', 'Production Challenges', 'Weather Planning', 'Yield (kg/ha)',
+                'Price (₹/kg)', 'Primary Buyers', 'Marketing Challenges', 'Training Attended',
+                'Training Organizer', 'Training Needed', 'Training Mode', 'Adoption Likelihood',
+                'Adoption Encouragers', 'Price Range', 'Additional Comments'
+            ];
+
+            const csvData = [headers];
+            
+            responses.forEach(response => {
+                const row = [
+                    response.id,
+                    response.data.farmerName || '',
+                    response.data.age || '',
+                    response.data.gender || '',
+                    response.data.stateDistrict || '',
+                    response.data.farmSize || '',
+                    response.data.experience || '',
+                    response.data.farmingType || '',
+                    Array.isArray(response.data.shrimpSpecies) ? response.data.shrimpSpecies.join(', ') : '',
+                    response.data.otherSpecies || '',
+                    response.data.stockingDensity || '',
+                    response.data.usesAeration || '',
+                    response.data.aeratorType || '',
+                    response.data.feedType || '',
+                    response.data.feedingTimes || '',
+                    response.data.testingFreq || '',
+                    response.data.hardestParams || '',
+                    response.data.measurementEquip || '',
+                    response.data.diseaseOutbreaks || '',
+                    response.data.diseaseTypes || '',
+                    response.data.diseaseDetection || '',
+                    response.data.preventiveMeasures || '',
+                    response.data.usesIoT || '',
+                    response.data.monitoredParams || '',
+                    response.data.systemProvider || '',
+                    response.data.dataManagement || '',
+                    response.data.appsUsed || '',
+                    response.data.desiredAlerts || '',
+                    response.data.prodChallenges || '',
+                    response.data.weatherPlanning || '',
+                    response.data.yield || '',
+                    response.data.price || '',
+                    response.data.primaryBuyers || '',
+                    response.data.marketingChallenges || '',
+                    response.data.trainingAttended || '',
+                    response.data.trainingOrganizer || '',
+                    response.data.trainingNeeded || '',
+                    response.data.trainingMode || '',
+                    response.data.adoptionLikelihood || '',
+                    response.data.adoptionEncouragers || '',
+                    response.data.priceRange || '',
+                    response.data.comments || ''
+                ];
+                csvData.push(row);
+            });
+
+            const csvContent = csvData.map(row => 
+                row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')
+            ).join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `shrimp_survey_responses_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Initialize with one empty response
+        addResponse();
+    </script>
+</body>
+</html>

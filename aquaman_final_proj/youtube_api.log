@@ -1,0 +1,8 @@
+2025-05-15 13:38:04,042 - youtube_api - INFO - Searching YouTube for: 'Chola chola tamil song' (limit: 3)
+2025-05-15 13:38:04,903 - youtube_api - INFO - Search completed in 0.86s, found 0 results
+2025-05-15 13:41:26,711 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2025-05-15 13:42:29,246 - httpx - INFO - HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2025-05-15 13:42:29,253 - youtube_api - INFO - Extracting info for video: dQw4w9WgXcQ
+2025-05-15 13:42:43,016 - youtube_api - ERROR - Error extracting video info for dQw4w9WgXcQ: [0;31mERROR:[0m [youtube] dQw4w9WgXcQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2025-05-15 13:42:43,024 - youtube_api - ERROR - Error in video info endpoint: 404: Error extracting info: [0;31mERROR:[0m [youtube] dQw4w9WgXcQ: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2025-05-15 13:42:43,029 - httpx - INFO - HTTP Request: GET http://testserver/video/dQw4w9WgXcQ "HTTP/1.1 500 Internal Server Error"
